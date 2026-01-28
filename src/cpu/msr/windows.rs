@@ -13,7 +13,7 @@
 //
 // TODO: Migrate to safer alternatives:
 // - Windows Performance Counters (PDH API)
-// - Event Tracing for Windows (ETW) 
+// - Event Tracing for Windows (ETW)
 // - WMI-based energy monitoring APIs
 
 use once_cell::sync::OnceCell;
