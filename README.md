@@ -26,7 +26,9 @@ Depending on your hardware you need different dependencies.
 
 ### Windows
 
-Install the LibreHardwareMonitor kernel driver to access CPU Model-Specific Registers (MSRs) for energy monitoring. This driver replaces the deprecated WinRing0 driver with a modern, actively maintained alternative that provides the same functionality with better security.
+⚠️ **Security Note**: This project currently requires a kernel driver (based on WinRing0) to access CPU Model-Specific Registers (MSRs) for energy monitoring. While the driver is maintained by the LibreHardwareMonitor project, it still carries inherent security risks associated with kernel-level hardware access.
+
+**Current Approach**: Install the driver from LibreHardwareMonitor project:
 
 In an elevated (Administrator) command line (e.g. cmd.exe):
 ```
@@ -47,6 +49,13 @@ cargo build -r
 ```
 
 > For PowerShell use `sc.exe` instead of `sc`.
+
+**Future Alternatives**: We are exploring safer alternatives that don't require kernel drivers, such as:
+- Windows Performance Counters (PDH API)
+- Event Tracing for Windows (ETW) with Microsoft-Windows-Kernel-Power provider
+- WMI-based energy monitoring APIs
+
+Contributions to implement these alternatives are welcome!
 
 ### Linux
 

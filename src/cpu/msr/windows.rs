@@ -1,5 +1,21 @@
 #![cfg(target_os = "windows")]
 
+// Windows MSR (Model-Specific Register) access implementation
+// 
+// This module uses a kernel driver to read CPU MSRs for energy monitoring.
+// The driver (LibreHardwareMonitor.sys) is based on WinRing0 and requires
+// administrator privileges. This approach has inherent security risks due
+// to kernel-level hardware access.
+//
+// SECURITY WARNING: Kernel drivers that provide MSR access can be exploited
+// for privilege escalation. Use with caution and only install from trusted
+// sources.
+//
+// TODO: Migrate to safer alternatives:
+// - Windows Performance Counters (PDH API)
+// - Event Tracing for Windows (ETW) 
+// - WMI-based energy monitoring APIs
+
 use once_cell::sync::OnceCell;
 use std::{ffi::CString, sync::Once};
 use std::{
@@ -27,6 +43,10 @@ pub enum RaplError {
 }
 
 const IOCTL_OLS_READ_MSR: u32 = 0x9C402084;
+
+// NOTE: This IOCTL code is from the WinRing0 interface, which LibreHardwareMonitor.sys
+// maintains for backward compatibility. While LibreHardwareMonitor is actively maintained,
+// the underlying driver architecture still carries the same security concerns as WinRing0.
 
 //static RAPL_STOP: AtomicU64 = AtomicU64::new(0);
 
@@ -71,6 +91,8 @@ fn is_admin() -> bool {
 }
 
 fn open_driver() -> Result<HANDLE, RaplError> {
+    // Connect to the LibreHardwareMonitor kernel driver (registered as "rapl" service)
+    // This driver provides WinRing0-compatible interface for MSR access
     let driver_name = CString::new("\\\\.\\rapl").expect("failed to create driver name");
     Ok(unsafe {
         CreateFileA(
