@@ -71,7 +71,7 @@ fn is_admin() -> bool {
 }
 
 fn open_driver() -> Result<HANDLE, RaplError> {
-    let driver_name = CString::new("\\\\.\\WinRing0_1_2_0").expect("failed to create driver name");
+    let driver_name = CString::new("\\\\.\\rapl").expect("failed to create driver name");
     Ok(unsafe {
         CreateFileA(
             PCSTR(driver_name.as_ptr() as *const u8), // File path

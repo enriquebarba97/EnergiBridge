@@ -26,8 +26,7 @@ Depending on your hardware you need different dependencies.
 
 ### Windows
 
-Install LibreHardwareMonitor to access the CPU registry.
-
+Install the LibreHardwareMonitor kernel driver to access CPU Model-Specific Registers (MSRs) for energy monitoring. This driver replaces the deprecated WinRing0 driver with a modern, actively maintained alternative that provides the same functionality with better security.
 
 In an elevated (Administrator) command line (e.g. cmd.exe):
 ```
